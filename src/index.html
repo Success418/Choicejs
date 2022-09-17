@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>ChoicesJS Web Component (dev)</title>
+    <script src="https://cdn.jsdelivr.net/npm/choices.js@9.0.1/public/assets/scripts/choices.js"></script>
+    <script type="module" src="/build/choicesjsstencil.esm.js"></script>
+    <script nomodule src="/build/choicesjsstencil.js"></script>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 14px;
+        padding: .75rem;
+      }
+      html, body {
+        width: 100%;
+        margin: 0;
+      }
+      choicesjs-stencil {
+        position: relative;
+        width: 100%;
+        height: auto;
+      }
+      .select {
+        padding: 1rem 0;
+      }
+      .submit {
+        text-align: center;
+      }
+      .btn {
+        background-color: #0d83ff;
+        border: none;
+        border-radius: 4px;
+        color: #fff;
+        font-size: 1rem;
+        padding: 8px 12px;
+        cursor: pointer;
+      }
+      .btn:hover {
+        box-shadow: 0 1px 2px 0 rgba(0,0,0,.5);
+      }
+      .values-container {
+        background-color: #f9f9f9;
+        padding: .5rem;
+        margin-top: 1rem;
+      }
+      .values-container .values-container__text {
+        word-break: break-all;
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Sample Code</h2>
+    <form name="choicesjs-stencil">
+      <div class="select">
+        <header>Text / Tags</header>
+        <choicesjs-stencil name="text" type="text" value="Item1,Item2" placeholder="Add Item..."></choicesjs-stencil>
+      </div>
+      <div class="select">
+        <header>Select / Dropdown</header>
+        <choicesjs-stencil name="single" type="single" value="Item1,Item2,Item3,Item4"></choicesjs-stencil>
+      </div>
+      <div class="select">
+        <header>Multiselect</header>
+        <choicesjs-stencil name="multiple" type="multiple"></choicesjs-stencil>
+      </div>
+      <div class="submit">
+        <button type="submit" class="btn">submit</button>
+      </div>
+    </form>
+    <div class="values-container">
+      <p class="values-container__text"></p>
+    </div>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        var choices = [
+          { 'value': 'Item1', 'label': 'Item1', 'selected': false, 'disabled': false },
+          { 'value': 'Item2', 'label': 'Item2', 'selected': false, 'disabled': false },
+          { 'value': 'Item3', 'label': 'Item3', 'selected': true, 'disabled': false },
+          { 'value': 'Item4', 'label': 'Item4', 'selected': false, 'disabled': false },
+          { 'value': 'Item5', 'label': 'Item5', 'selected': false, 'disabled': false },
+          { 'value': 'Item6', 'label': 'Item6', 'selected': false, 'disabled': false },
+          { 'value': 'Item7', 'label': 'Item7', 'selected': false, 'disabled': false },
+          { 'value': 'Item8', 'label': 'Item8', 'selected': false, 'disabled': false },
+          { 'value': 'Item9', 'label': 'Item9', 'selected': false, 'disabled': true },
+          { 'value': 'Item10', 'label': 'Item10', 'selected': false, 'disabled': false },
+          { 'value': 'Item11', 'label': 'Item11', 'selected': false, 'disabled': false },
+          { 'value': 'Item12', 'label': 'Item12', 'selected': false, 'disabled': false },
+          { 'value': 'Item13', 'label': 'Item13', 'selected': false, 'disabled': false },
+          { 'value': 'Item14', 'label': 'Item14', 'selected': false, 'disabled': false },
+          { 'value': 'Item15', 'label': 'Item15', 'selected': false, 'disabled': false },
+          { 'value': 'Item16', 'label': 'Item16', 'selected': false, 'disabled': true },
+          { 'value': 'Item17', 'label': 'Item17', 'selected': false, 'disabled': false },
+          { 'value': 'Item18', 'label': 'Item18', 'selected': false, 'disabled': false },
+          { 'value': 'Item19', 'label': 'Item19', 'selected': false, 'disabled': false },
+          { 'value': 'Item20', 'label': 'Item20', 'selected': false, 'disabled': false },
+          { 'value': 'Item21', 'label': 'Item21', 'selected': false, 'disabled': false },
+          { 'value': 'Item22', 'label': 'Item22', 'selected': false, 'disabled': false }
+        ];
+        var events = [
+          'addItem', 'removeItem', 'highlightItem', 'unhighlightItem',
+          'choice', 'change', 'search', 'showDropdown', 'hideDropdown'
+        ];
+
+        var selectText = document.querySelector('choicesjs-stencil[type=text]');
+        var selectSingle = document.querySelector('choicesjs-stencil[type=single]');
+        var selectMultiple = document.querySelector('choicesjs-stencil[type=multiple]');
+
+        var form = document.querySelector('form[name=choicesjs-stencil]');
+
+        form.addEventListener('submit', function(event) {
+          var valuesTextContainer = document.querySelector('.values-container p');
+          var form = new FormData(this);
+          var values = [];
+
+          form.forEach(function(value, name) {
+            values.push(name + ': `' + value + '`');
+          });
+
+          valuesTextContainer.innerHTML = values.join(' | ');
+
+          console.log('values', values);
+
+          event.preventDefault();
+          event.stopImmediatePropagation();
+        });
+
+        selectMultiple.choices = choices;
+
+        [ selectSingle, selectMultiple ].forEach(function(select) {
+          select.placeholder = true;
+          select.placeholderValue = 'type...';
+        });
+        [ selectText, selectSingle, selectMultiple ].forEach(function(select) {
+          select.removeItems = true;
+          select.removeItemButton = true;
+
+          events.forEach(function(event) {
+            select.addEventListener(event, function(data) {
+              console.log(event, data.detail);
+            });
+          });
+        });
+
+        // expose references
+        window.form = form;
+        window.selectText = selectText;
+        window.selectSingle = selectSingle;
+        window.selectMultiple = selectMultiple;
+      });
+    </script>
+  </body>
+</html>
