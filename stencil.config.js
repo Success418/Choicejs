@@ -7,14 +7,23 @@ exports.config = {
       components: [ 'choicesjs-stencil' ]
     }
   ],
+  // outputTargets: [
+  //   {
+  //     type: 'dist'
+  //   }, {
+  //     type: 'www',
+  //     indexHtml: './index.html'
+  //   }
+  // ],
+
   outputTargets: [
-    {
-      type: 'dist'
-    }, {
-      type: 'www',
-      indexHtml: './index.html'
-    }
-  ],
+      {
+        type: 'dist'
+      }, {
+        type: 'www',
+        indexHtml: './index.html'
+      }
+    ],
   plugins: [ sass() ],
   devServer: {
     openBrowser: false
