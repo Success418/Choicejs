@@ -15,6 +15,11 @@ exports.config = {
       indexHtml: './index.html'
     }
   ],
+  // plugins: [ sass() ],
+  // devServer: {
+  //   openBrowser: false
+  // }
+
   plugins: [ sass() ],
   devServer: {
     openBrowser: false
